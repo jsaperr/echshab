@@ -9,12 +9,25 @@
         height: 400px;
         border: px solid #ccc;
         background-color: rgba(240, 236, 236, 0.5);
-}
+    }
+    .image-container {    
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 80%; /* Adjust the width as desired */
+            object-fit: contain; /* Maintain aspect ratio */
+            margin: 0 auto; /* Center the container horizontally */
+          }
 
 </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel="stylesheet" href="./style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+<script>
+  function openImage(imageUrl) {
+      window.open(imageUrl, '_blank'); 
+  }
+</script>
 
 </head>
 <body>
@@ -23,8 +36,6 @@
   <div id="header">
     <img src="logo.png" width="50px" />
     <ul>
-      <li>Home</li>
-      <li>About</li>
     </ul>
   </div>
   <div class="header">
@@ -36,30 +47,71 @@
   <h1>Introduction</h1>
   <p>The goal of our project was to design launch a high altitude weather balloon containing a scientific experiment and sensors, in order to measure atmospheric data. To do this we split into a media team, and engineering team, and a science team.</p>
   <p>The Engineering team was tasked with building the sensors that would go up in the balloon. This involved soldering many different components together as well as writing code to collect data on the atmosphere as the balloon ascended.<p>
+  
   <h1>Materials & Procedures</h1>
-  <p>Our largest task was designing circuitry and code which would let us collect accurate atmospheric data. Our materials consisted of a a pressure sensor, an accelerometer, and a thermometer. Our first steps were to set up all the sensors, to ensure they worked as individual units. To do this we connected them to an arduino, and used custom packages to read the data. Once all sensors were working individually, we connected them in an integrated system. We connected all of the circuitry on a breadboard, and made the code more modular so that it could all operate in once piece. Once the design was finalized, we soldered it together on a breadboard. We also needed a method to store the data. In order to do that, we connected an SD card to the Arduino.</p>
+  
+  <h2>Media Team</h2>
+  <p>The media team was tasked with creating a video, documenting the process of creating, launching, and recovering the balloon. See this video below: </p>
+  <p>not done yet</p>
+  
+  <h2>Science Team</h2>
+  <p>The science team was tasked with creating a science experiment that would take place in the balloon as it ascended. See their poster about it below:</p>
+  <div style="display: flex; justify-content: center;">
+    <img src="Poster1.png" onclick="openImage('Poster1.png')" alt="Poster 1" style="max-width: 80%; height: auto;">
+  </div>
+  
+  
+  <h2>Engineering Team</h2>
+  <p>The engineering team was tasked with designing and creating a system of sensors which would measure atmospheric data. This involved a pressure sensor, a thermometer, and an accelerometer.</p>
+  <h3>Making sure each sensor worked individually.</h3>
+  <p>Each sensor was an integrated circuit. In order to get each one working, we needed to wire it to an Arduino board, and write code which allowed us to read data from the sensor, and translate it into understandable units.</p>
+  <h3>Ensuring we could store the data.</h3>
+  <p>Our first approach was to use the onboard Arduino memory, called EEPROM. We wrote code which would ‘write’ the temperature, acceleration, and pressure values to the EEPROM every minute or so. The primary constraint with this system was that there was only around 1mb of data, meaning we could only record one data point per minute for around 5 hours.</p>
+  <p>Because of this size restriction, we decided to use an SD card. We connected the SD card to the Arduino with a SD card reader, and downloaded packages which allowed us to create and write to files. Having more storage space allowed us to store data every 1 second. We also recorded the timestamp of when each piece of data was collected, using a built in time function of the arduino board.</p>
+  <h3>Integrating the circuits.</h3>
+  <p>Now that we had every circuit working individually and a way to store the data, we needed a way to make sure everything worked together. To do this, we created a schematic of how the circuit would look with everything connected. Once we created this, we soldered the circuit onto a perfboard.</p>
+  <p>We also needed to modify the code to work together in one piece. We turned the code for reading data from each individual sensor into its own function. We then created a ‘run’ function, which called each sensor function consecutively, stored that data to the SD card, and then waited a given amount of time before repeating the process</p>
+  <h3>Securing the system to the payload.</h3>
+  <p>Because the balloon was going to experience turbulence in the air, as well as a sudden change in acceleration when it popped and hit the ground, we needed to ensure that all parts of the system were solidly secured to the payload. To do this we duct taped the different parts of the circuit to different parts of the payload.</p>
+
   <h1>Results</h1>
-  <p>After parsing through the data we gathered from the flight, we realized that unfortunately, the sensors stopped giving data around 3 and a third hours into the flight, before the balloon reached its peak altitude. However, we did gather quite a lot of data, which you can see in the graphs below. We can see the pressure and temperature gradually decrease, and the acceleration (once launched) stayed pretty constant, as we the data doesn’t go far enough to reach the descent of the balloon, where we would see a spike in the acceleration. </p>
+  <p>After parsing through the data we gathered from the flight, we realized that unfortunately, the sensors stopped giving data around 3 hours into the flight, before the balloon reached its peak altitude. This means that we did not get the most interesting part of the flight, namely when the balloon pops and begins to descend. However, the data we did gather is still insightful, and using it we compiled the graphs below:</p>
+  
 </div>
 
 <div class="semitrans">
   
 </div>
+<div class="white">
+  <p></p>
+</div>
 
 <div class="graph-container">
     <iframe src="altitude.html" frameborder="0" width="100%" height="100%"></iframe>
+</div>
+<div class="white">
+  <p>While we didn’t have an “altimeter”, or altitude sensor, we were able to calculate altitude based on pressure. Pressure and altitude are inversely proportional, meaning as one goes up the other goes down.</p>
 </div>
 
 <div class="graph-container">
     <iframe src="temperature.html" frameborder="0" width="100%" height="100%"></iframe>
 </div>
+<div class="white">
+  <p>As a general rule, temperature decreases 3.5 degrees F for every 1,000 feet of elevation gain. This is because the atmosphere becomes thinner. However, you can see that around 11k seconds (or 13.5k feet of elevation), the temperature begins to rise again. </p>
+</div>
 
 <div class="graph-container">
     <iframe src="pressure.html" frameborder="0" width="100%" height="100%"></iframe>
 </div>
+<div class="white">
+  <p>Pressure is a measure of the force on an area. There is a good amount of pressure where we live (on Earth’s surface), but almost none in outer space. As the balloon moved upwards towards outer space, pressure decreased.</p>
+</div>
 
 <div class="graph-container">
     <iframe src="acceleration.html" frameborder="0" width="100%" height="100%"></iframe>
+</div>
+<div class="white">
+  <p>We were also measuring vertical acceleration, Despite the acceleration graph looking like it’s all over the place, acceleration actually remains fairly constant (see the numbers on the y axis).</p>
 </div>
 
 <!-- partial -->
